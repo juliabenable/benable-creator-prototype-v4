@@ -50,8 +50,11 @@
   -webkit-tap-highlight-color: transparent;
 }
 .grid__card-inner {
-  display: grid;
-  place-items: center;
+  /* Flex (not grid) so the polaroid's 320px layout box centers symmetrically
+     in this 150px slot instead of overflowing to one side. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 150px;
   height: 188px;
   transform: rotate(var(--tilt, 0deg));
@@ -65,10 +68,15 @@
   transform: rotate(var(--tilt, 0deg)) scale(0.98);
 }
 
-/* Scale the 320×400 polaroid down to a ~150px shelf print. */
+/* Scale the 320×400 polaroid down to a ~150px shelf print. Force the base
+   size (overriding postcard.css's viewport media query) so every grid card is
+   identical regardless of where it's viewed. */
 .grid .pc-polaroid {
+  flex: 0 0 auto;
+  width: 320px; height: 400px;
+  padding: 14px 14px 0;
   transform: scale(0.47);
-  transform-origin: center top;
+  transform-origin: center;
 }
 
 .grid__label {

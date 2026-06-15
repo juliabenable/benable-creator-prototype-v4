@@ -51,8 +51,11 @@
 .focus__face {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
+  /* Flex (not grid) so the polaroid — whose layout box (320px) is wider than
+     this face — centers symmetrically rather than overflowing to one side. */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
 }
@@ -61,6 +64,7 @@
 /* Force a consistent large polaroid regardless of the viewport-based size
    rules in postcard.css (so the focused card is always big + legible). */
 .focus .pc-polaroid {
+  flex: 0 0 auto;
   width: 320px; height: 400px;
   padding: 14px 14px 0;
   transform: scale(0.9);
