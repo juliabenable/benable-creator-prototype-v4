@@ -1,0 +1,120 @@
+.wall {
+  min-height: 100%;
+  padding: 28px 16px 36px;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255,236,210,0.65), transparent 55%),
+    radial-gradient(circle at 80% 70%, rgba(244,224,255,0.45), transparent 55%),
+    repeating-linear-gradient(45deg, rgba(122, 92, 250, 0.018) 0 2px, transparent 2px 4px),
+    #fbf6ee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wall__pin-area {
+  perspective: 1200px;
+  padding-top: 18px;
+  margin-bottom: 22px;
+}
+.wall__card {
+  position: relative;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  width: 220px;
+  height: 290px;
+  transform-style: preserve-3d;
+  transition: transform .65s cubic-bezier(.4, 0, .2, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+.wall__card--no-flip { cursor: default; }
+.wall__card--flipped { transform: rotateY(180deg); }
+.wall__face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.wall__face--back { transform: rotateY(180deg); }
+
+/* Scale the polaroid (320x400 base from postcard.css) so it fits the
+   220x290 card slot cleanly, with a slight pinned tilt. */
+.wall__card .pc-polaroid {
+  transform: rotate(-3deg) scale(0.68);
+  transform-origin: center top;
+}
+
+.wall__caption {
+  text-align: center;
+  color: #6b6b73;
+  font: 500 12px/1.4 -apple-system, system-ui, sans-serif;
+  max-width: 280px;
+  margin: 0;
+}
+.wall__caption-hint { color: #9c84f7; font-weight: 500; }
+
+/* Polaroid back face — paper note */
+.pc-polaroid--back {
+  background:
+    radial-gradient(ellipse at top, rgba(255,232,176,0.18), transparent 60%),
+    #fffaf0;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+}
+.pc-back__header {
+  font: 600 11px/1 -apple-system, system-ui, sans-serif;
+  color: #9c84f7;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 6px;
+  margin-bottom: 14px;
+}
+.pc-back__message {
+  font-family: 'Caveat', 'Bradley Hand', cursive, system-ui;
+  font-size: 19px;
+  line-height: 1.25;
+  color: #2a2a2a;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+.pc-back__signoff {
+  font-family: 'Caveat', 'Bradley Hand', cursive, system-ui;
+  font-size: 15px;
+  color: #888;
+  margin-bottom: 8px;
+}
+.pc-back__deco {
+  position: absolute;
+  top: 12px; right: 14px;
+  color: #e85a82;
+  font-size: 14px;
+  opacity: 0.55;
+}
+
+/* While the takeover scrim is on-screen (and not in its dismiss-fade),
+   hide the wall's polaroid + caption so the translucent scrim has
+   nothing to leak through. During the flying dismiss the scrim gets
+   the --out class, `:has()` stops matching, and the wall content
+   fades back in just as the polaroid lands. */
+.wall__pin-area,
+.wall__caption {
+  transition: opacity 0.4s ease;
+}
+.phone:has(.tyt-scrim:not(.tyt-scrim--out)) .wall__pin-area,
+.phone:has(.tyt-scrim:not(.tyt-scrim--out)) .wall__caption {
+  opacity: 0;
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wall__card { transition: none; }
+  .wall__pin-area, .wall__caption { transition: none; }
+}

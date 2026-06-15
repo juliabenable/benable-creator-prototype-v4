@@ -1,0 +1,244 @@
+.tyt-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  /* Soft frosted-glass overlay — translucent so the wall's warm tone
+     glows through, blur softens the edges. No leak because the wall's
+     polaroid + caption are hidden via :has() while the scrim is up
+     (see wall.css). */
+  background: rgba(28, 22, 44, 0.62);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  /* Opaque from first render — entry fade was JS-driven and proved fragile
+     under React 19 StrictMode. The exit fade is still smooth via --out. */
+  opacity: 1;
+  transition: opacity .3s ease;
+}
+.tyt-scrim--out { opacity: 0; }
+
+.tyt-stage {
+  position: relative;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.tyt-envelope {
+  position: relative;
+  width: 280px;
+  height: 180px;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+.tyt-env-back {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #c89472 0%, #b07a55 50%, #9c6443 100%);
+  border-radius: 6px;
+  box-shadow: 0 14px 30px rgba(0,0,0,0.3);
+  z-index: 1;
+}
+.tyt-polaroid-wrap {
+  position: absolute;
+  left: 50%; top: 12px;
+  transform: translateX(-50%) scale(0.5);
+  transform-origin: top center;
+  z-index: 2;
+  opacity: 0;
+}
+.tyt-env-front {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 64%;
+  background: linear-gradient(180deg, #f1d6b8 0%, #e6c69a 60%, #d4a373 100%);
+  clip-path: polygon(0 26%, 50% 0, 100% 26%, 100% 100%, 0 100%);
+  z-index: 3;
+}
+.tyt-env-flap {
+  position: absolute; top: 0; left: 0; right: 0; height: 64%;
+  background: linear-gradient(180deg, #e6c69a 0%, #c89472 100%);
+  clip-path: polygon(0 0, 50% 100%, 100% 0);
+  transform-origin: top center;
+  z-index: 4;
+}
+.tyt-seal {
+  position: absolute; top: 44%; left: 50%;
+  width: 30px; height: 30px; margin-left: -15px;
+  display: grid; place-items: center;
+  background: #e85a82; color: #fff; font-size: 15px;
+  border-radius: 50%;
+  z-index: 5;
+}
+.tyt-cp { display: none; }
+
+.tyt-caption {
+  margin: 0;
+  color: #fff;
+  font: 600 16px/1.3 -apple-system, system-ui, sans-serif;
+  text-align: center;
+  min-height: 21px;
+}
+.tyt-done, .tyt-skip {
+  border: 0;
+  cursor: pointer;
+  font: 600 14px/1 -apple-system, system-ui, sans-serif;
+}
+.tyt-done {
+  background: #fff; color: #5d3fd3;
+  padding: 12px 26px; border-radius: 999px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+.tyt-skip {
+  background: none; color: rgba(255,255,255,0.75);
+  padding: 6px 12px;
+}
+
+/* ---------- Elevated celebratory choreography ---------- */
+
+/* Envelope arrival + idle float while sealed. */
+@keyframes tyt-arrive {
+  0%   { transform: translateY(120%) scale(0.7) rotate(-6deg); opacity: 0; }
+  60%  { transform: translateY(-14px) scale(1.03) rotate(1deg); opacity: 1; }
+  78%  { transform: translateY(4px) scale(0.99) rotate(0); }
+  100% { transform: translateY(0) scale(1) rotate(0); opacity: 1; }
+}
+@keyframes tyt-float {
+  0%, 100% { transform: translateY(0) rotate(-0.4deg); }
+  50%      { transform: translateY(-7px) rotate(0.4deg); }
+}
+.tyt-envelope { animation: tyt-arrive .85s cubic-bezier(.22,1,.36,1) both; }
+.tyt--sealed .tyt-envelope {
+  animation: tyt-arrive .85s cubic-bezier(.22,1,.36,1) both,
+             tyt-float 3.4s ease-in-out 1s infinite;
+}
+.tyt--sealed .tyt-envelope::after {
+  content: '';
+  position: absolute; inset: -10px;
+  border-radius: 14px;
+  box-shadow: 0 0 0 0 rgba(255,255,255,0.0);
+  animation: tyt-hint 2.2s ease-out 1.2s infinite;
+}
+@keyframes tyt-hint {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.35); }
+  70%  { box-shadow: 0 0 0 16px rgba(255, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+/* Smooth, premium phase transitions. */
+.tyt-env-flap {
+  transition: transform .6s cubic-bezier(.5,0,.2,1);
+  transform: rotateX(0deg);
+}
+.tyt-seal {
+  transition: transform .5s cubic-bezier(.55,-0.2,.3,1.3), opacity .4s ease .1s;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25));
+}
+.tyt-polaroid-wrap {
+  transition: transform .85s cubic-bezier(.34,1.56,.64,1), opacity .3s ease;
+}
+
+/* Opening: seal cracks off, flap swings up and back. */
+.tyt--opening .tyt-seal,
+.tyt--revealed .tyt-seal {
+  opacity: 0;
+  transform: translateY(36px) scale(0.15) rotate(-28deg);
+}
+.tyt--opening .tyt-env-flap,
+.tyt--revealed .tyt-env-flap {
+  transform: rotateX(-172deg);
+  z-index: 0;
+}
+.tyt--opening .tyt-polaroid-wrap,
+.tyt--revealed .tyt-polaroid-wrap { opacity: 1; }
+
+/* Revealed: polaroid springs out and settles with a tilt. */
+.tyt--revealed .tyt-polaroid-wrap {
+  transform: translateX(-50%) translateY(-156px) scale(1.02) rotate(-3deg);
+  z-index: 6;
+}
+
+/* Flying: polaroid animates from revealed pose toward the wall pin
+   coordinates, scrim fades, then the takeover unmounts. The wall's
+   static polaroid is at matching visual coordinates; the opacity fade
+   at the end of flying hides any sub-pixel mismatch. */
+.tyt--flying .tyt-polaroid-wrap {
+  transform: translateX(-50%) translateY(-300px) scale(0.69) rotate(-3deg);
+  z-index: 6;
+  transition: transform .55s cubic-bezier(.4, 0, .2, 1), opacity .25s ease .35s;
+  opacity: 0;
+}
+.tyt--flying .tyt-envelope,
+.tyt--flying .tyt-env-flap,
+.tyt--flying .tyt-env-front,
+.tyt--flying .tyt-env-back,
+.tyt--flying .tyt-seal {
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+
+/* Confetti burst — only on reveal. */
+.tyt-cp {
+  display: block;
+  position: absolute;
+  left: 50%; top: 40%;
+  width: 9px; height: 9px;
+  border-radius: 2px;
+  opacity: 0;
+  z-index: 7;
+  pointer-events: none;
+}
+.tyt-cp--1  { background: #f8c3d0; }
+.tyt-cp--2  { background: #c4a4e8; width: 7px; height: 7px; border-radius: 50%; }
+.tyt-cp--3  { background: #ffd166; width: 6px; height: 6px; }
+.tyt-cp--4  { background: #7ed3a3; border-radius: 50%; }
+.tyt-cp--5  { background: #e85a82; width: 7px; height: 7px; }
+.tyt-cp--6  { background: #7a5cfa; width: 8px; height: 8px; border-radius: 50%; }
+.tyt-cp--7  { background: #ffd166; }
+.tyt-cp--8  { background: #f8c3d0; width: 6px; height: 6px; border-radius: 50%; }
+.tyt-cp--9  { background: #7ed3a3; width: 7px; height: 7px; }
+.tyt-cp--10 { background: #c4a4e8; }
+.tyt--revealed .tyt-cp {
+  animation: var(--tyt-cp-anim) 1s cubic-bezier(.2,.6,.4,1) .15s forwards;
+}
+.tyt--revealed .tyt-cp--1  { --tyt-cp-anim: tyt-cp-1; }
+.tyt--revealed .tyt-cp--2  { --tyt-cp-anim: tyt-cp-2; }
+.tyt--revealed .tyt-cp--3  { --tyt-cp-anim: tyt-cp-3; }
+.tyt--revealed .tyt-cp--4  { --tyt-cp-anim: tyt-cp-4; }
+.tyt--revealed .tyt-cp--5  { --tyt-cp-anim: tyt-cp-5; }
+.tyt--revealed .tyt-cp--6  { --tyt-cp-anim: tyt-cp-6; }
+.tyt--revealed .tyt-cp--7  { --tyt-cp-anim: tyt-cp-7; }
+.tyt--revealed .tyt-cp--8  { --tyt-cp-anim: tyt-cp-8; }
+.tyt--revealed .tyt-cp--9  { --tyt-cp-anim: tyt-cp-9; }
+.tyt--revealed .tyt-cp--10 { --tyt-cp-anim: tyt-cp-10; }
+@keyframes tyt-cp-1  { 0% { opacity: 0; transform: translate(0,0) rotate(0); } 10% { opacity: 1; } 100% { opacity: 0; transform: translate(-150px,-180px) rotate(360deg); } }
+@keyframes tyt-cp-2  { 0% { opacity: 0; transform: translate(0,0) rotate(0); } 10% { opacity: 1; } 100% { opacity: 0; transform: translate(160px,-150px) rotate(-280deg); } }
+@keyframes tyt-cp-3  { 0% { opacity: 0; transform: translate(0,0) rotate(0); } 10% { opacity: 1; } 100% { opacity: 0; transform: translate(-100px,-210px) rotate(220deg); } }
+@keyframes tyt-cp-4  { 0% { opacity: 0; transform: translate(0,0) rotate(0); } 10% { opacity: 1; } 100% { opacity: 0; transform: translate(140px,-200px) rotate(-360deg); } }
+@keyframes tyt-cp-5  { 0% { opacity: 0; transform: translate(0,0) rotate(0); } 10% { opacity: 1; } 100% { opacity: 0; transform: translate(-190px,-110px) rotate(180deg); } }
+@keyframes tyt-cp-6  { 0% { opacity: 0; transform: translate(0,0) rotate(0); } 10% { opacity: 1; } 100% { opacity: 0; transform: translate(60px,-230px) rotate(-180deg); } }
+@keyframes tyt-cp-7  { 0% { opacity: 0; transform: translate(0,0) rotate(0); } 10% { opacity: 1; } 100% { opacity: 0; transform: translate(210px,-70px) rotate(420deg); } }
+@keyframes tyt-cp-8  { 0% { opacity: 0; transform: translate(0,0) rotate(0); } 10% { opacity: 1; } 100% { opacity: 0; transform: translate(-70px,-240px) rotate(-220deg); } }
+@keyframes tyt-cp-9  { 0% { opacity: 0; transform: translate(0,0) rotate(0); } 10% { opacity: 1; } 100% { opacity: 0; transform: translate(110px,-160px) rotate(300deg); } }
+@keyframes tyt-cp-10 { 0% { opacity: 0; transform: translate(0,0) rotate(0); } 10% { opacity: 1; } 100% { opacity: 0; transform: translate(-130px,-50px) rotate(-340deg); } }
+
+/* Reduced motion: no choreography — show the polaroid upright immediately. */
+@media (prefers-reduced-motion: reduce) {
+  .tyt-envelope,
+  .tyt--sealed .tyt-envelope,
+  .tyt--sealed .tyt-envelope::after { animation: none; }
+  .tyt-env-flap, .tyt-seal, .tyt-polaroid-wrap { transition: none; }
+  .tyt-env-flap, .tyt-env-front, .tyt-env-back, .tyt-seal { display: none; }
+  .tyt-polaroid-wrap,
+  .tyt--revealed .tyt-polaroid-wrap,
+  .tyt--flying .tyt-polaroid-wrap {
+    position: static;
+    transform: none;
+    z-index: 6;
+  }
+  .tyt--revealed .tyt-cp { animation: none; }
+}

@@ -1,0 +1,55 @@
+.campaigns { display: flex; flex-direction: column; height: 100%; }
+.subtabs {
+  display: flex;
+  gap: 6px;
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+}
+.subtabs__item {
+  flex: 1;
+  padding: 9px 0;
+  border: 0;
+  border-radius: 999px;
+  background: #f1f0f5;
+  color: #6b6b73;
+  font: 600 13px/1 -apple-system, system-ui, sans-serif;
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease;
+}
+.subtabs__item--active { background: #7a5cfa; color: #fff; }
+.campaigns__body { flex: 1; overflow-y: auto; padding: 18px 16px 28px; }
+
+.empty { text-align: center; padding: 28px 8px; }
+.empty__icon {
+  width: 56px; height: 56px; margin: 12px auto;
+  display: grid; place-items: center;
+  font-size: 26px; border-radius: 16px;
+  background: #f3effe;
+}
+.empty__title { margin: 8px 0 4px; font: 700 19px/1.2 -apple-system, system-ui, sans-serif; color: #1a1a1a; }
+.empty__sub { margin: 0 auto; max-width: 280px; color: #7c7c85; font: 400 14px/1.4 -apple-system, system-ui, sans-serif; }
+.empty__expect { text-align: left; margin-top: 26px; background: #fff; border: 1px solid #eee; border-radius: 16px; padding: 16px; }
+.empty__expect-h { font: 700 13px/1 -apple-system, system-ui, sans-serif; color: #1a1a1a; margin-bottom: 14px; }
+.empty__row { display: flex; gap: 12px; padding: 9px 0; font: 600 14px/1.3 -apple-system, system-ui, sans-serif; color: #1a1a1a; }
+.empty__row-emoji { font-size: 18px; }
+.empty__row-d { font-weight: 400; color: #7c7c85; font-size: 13px; }
+
+.fcard { background: #fff; border: 1px solid #ececec; border-radius: 18px; padding: 16px; box-shadow: 0 6px 18px rgba(0,0,0,0.04); }
+.fcard__brandrow { display: flex; align-items: center; gap: 10px; }
+.fcard__avatar { width: 32px; height: 32px; border-radius: 50%; background: #7a5cfa; color: #fff; display: grid; place-items: center; font: 700 14px/1 system-ui; }
+.fcard__brand { font: 700 15px/1 -apple-system, system-ui, sans-serif; color: #1a1a1a; }
+.fcard__status { margin-left: auto; font: 600 11px/1 system-ui; color: #2a9d63; background: #e8f6ee; padding: 4px 8px; border-radius: 999px; }
+.fcard__title { margin: 14px 0 6px; font: 700 17px/1.25 -apple-system, system-ui, sans-serif; color: #1a1a1a; }
+.fcard__desc { margin: 0; color: #7c7c85; font: 400 13px/1.4 -apple-system, system-ui, sans-serif; }
+.fcard__thanks {
+  margin-top: 16px; width: 100%;
+  padding: 12px;
+  border: 1px dashed #c9b8fb;
+  background: #f6f2ff;
+  color: #5d3fd3;
+  border-radius: 12px;
+  font: 600 13px/1 -apple-system, system-ui, sans-serif;
+  cursor: pointer;
+}
+.campaigns__body--wall { padding: 0; }

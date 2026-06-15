@@ -1,0 +1,22 @@
+/* App styles — global resets + the demo reset FAB */
+:root { color-scheme: light; }
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; height: 100%; }
+
+.reset-fab {
+  position: absolute;
+  top: 60px; right: 14px;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.96);
+  color: #5d3fd3;
+  border: 1px solid rgba(122,92,250,0.25);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font: 600 12px/1 -apple-system, system-ui, sans-serif;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.14);
+}
+.reset-fab:hover { background: #fff; }

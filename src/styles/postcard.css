@@ -1,0 +1,150 @@
+.pc {
+  position: relative;
+  user-select: none;
+}
+
+/* Polaroid */
+.pc-polaroid {
+  width: 320px;
+  height: 400px;
+  background: #fffcf6;
+  border-radius: 4px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.32), 0 4px 8px rgba(0, 0, 0, 0.14);
+  transform: rotate(-2deg);
+  padding: 14px 14px 0;
+}
+.pc-polaroid__tape {
+  position: absolute;
+  top: -10px; left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+  width: 90px; height: 22px;
+  background: rgba(255, 232, 176, 0.92);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.pc-polaroid__photo {
+  width: 100%;
+  /* Slightly more square photo region than the original 65% — feels
+     closer to a real Polaroid 600. The handwritten caption + signoff
+     fit in the remaining 33% bottom border. */
+  height: 67%;
+  background: linear-gradient(135deg, #3a2f44 0%, #5d4a6b 40%, #c89472 100%);
+  position: relative;
+  overflow: hidden;
+}
+/* Blurred, zoomed copy of the first photo — fills the window so the real
+   photo(s) never have to be cropped to fit. */
+.pc-polaroid__photo-blur {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.25);
+  filter: blur(22px) saturate(1.15) brightness(0.9);
+}
+.pc-polaroid__photo-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.06);
+}
+/* Single post — the real photo at its true ratio, no crop, no shadow. */
+.pc-polaroid__photo-fg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+/* A little white-bordered instant-print used in the 2-up peek + 3+ pile. */
+.pc-polaroid__print {
+  position: absolute;
+  border: 3px solid #fff;
+  border-radius: 2px;
+  overflow: hidden;
+  background: #222;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.34);
+}
+.pc-polaroid__print img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* 2 posts — offset peek: back print left/tilt-left, front print right/tilt-right. */
+.pc-polaroid__print--peek-back {
+  width: 60%; height: 78%;
+  top: 42%; left: 42%;
+  transform: translate(-50%, -50%) rotate(-5deg);
+  z-index: 1;
+}
+.pc-polaroid__print--peek-front {
+  width: 62%; height: 82%;
+  top: 54%; left: 58%;
+  transform: translate(-50%, -50%) rotate(4deg);
+  z-index: 2;
+}
+/* 3+ posts — tilted pile (up to four prints). */
+.pc-polaroid__print--pile { width: 60%; height: 78%; top: 50%; left: 50%; }
+.pc-polaroid__print--pile-0 { transform: translate(-50%, -50%) translate(-26px, 6px) rotate(-7deg); z-index: 1; }
+.pc-polaroid__print--pile-1 { transform: translate(-50%, -50%) translate(24px, -4px) rotate(6deg); z-index: 2; }
+.pc-polaroid__print--pile-2 { transform: translate(-50%, -50%) translate(8px, 18px) rotate(-4deg); z-index: 3; }
+.pc-polaroid__print--pile-3 { transform: translate(-50%, -50%) translate(-14px, -16px) rotate(9deg); z-index: 4; }
+.pc-polaroid__platform-tag {
+  position: absolute;
+  top: 12px; left: 12px;
+  z-index: 6;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: 20px;
+}
+.pc-polaroid__caption {
+  margin-top: 16px;
+  font-family: 'Caveat', 'Bradley Hand', cursive, system-ui;
+  font-size: 22px;
+  text-align: center;
+  color: #2a2a2a;
+  line-height: 1.15;
+  padding: 0 6px;
+}
+.pc-polaroid__signoff {
+  font-family: 'Caveat', 'Bradley Hand', cursive, system-ui;
+  font-size: 16px;
+  color: #888;
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* Wavy photo sticker — die-cut cutout of the person who signed, pinned to
+   the bottom-right of the polaroid (anchored to .pc, position:relative).
+   Drop-shadow filter hugs the wavy outline so it reads as a paper cutout
+   applied on top. Read-only on the creator side — no edit affordance. */
+.pc-polaroid__sticker {
+  position: absolute;
+  right: -10px;
+  bottom: -14px;
+  width: 67px;
+  height: 67px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  transform: rotate(-8deg);
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.22)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.14));
+  display: inline-block;
+  line-height: 0;
+}
+.pc-polaroid__sticker-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible; /* drop-shadow filter spills past the viewBox */
+}
+
+@media (max-width: 720px) {
+  .pc-polaroid { width: 220px; height: 290px; }
+  .pc-polaroid__caption { font-size: 17px; }
+  .pc-polaroid__signoff { font-size: 13px; }
+  .pc-polaroid__sticker { width: 54px; height: 54px; right: -8px; bottom: -11px; }
+}
