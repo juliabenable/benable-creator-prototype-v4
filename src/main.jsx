@@ -8,6 +8,7 @@ import './styles/shell.css';
 import './styles/campaigns.css';
 import './styles/wall.css';
 import './styles/grid.css';
+import './styles/focus.css';
 import './styles/takeover.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(

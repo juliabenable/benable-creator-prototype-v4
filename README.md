@@ -17,8 +17,10 @@ The **Finished** tab is now a **Shelf Grid** (design-study direction C):
   mechanical.
 - **Brand + campaign label below each card** — the campaign reference stays
   off the polaroid face, as decided.
-- **Tap a card** to flip it in place to the brand's private note (cards
-  without a note don't flip); the tilt is preserved across the flip.
+- **Tap a card → focused lightbox** (`FocusedCard`): the polaroid lifts to
+  the foreground over a blurred, dimmed backdrop where you can flip it to the
+  brand's private note, browse the collection (prev/next arrows or arrow
+  keys), and dismiss via the close button, a backdrop tap, or Escape.
 - A small **"N thank-yous · your collection so far"** header keeps the
   celebratory framing.
 

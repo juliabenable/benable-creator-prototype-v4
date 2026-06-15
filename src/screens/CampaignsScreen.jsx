@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import EmptyState from './EmptyState.jsx';
 import ThankYouGrid from './ThankYouGrid.jsx';
-import { getFinishedCollabs } from '../utils/creatorStorage.js';
 
 const SUBTABS = ['New', 'Active', 'Finished'];
 
-export default function CampaignsScreen() {
+export default function CampaignsScreen({ collabs, onOpenCard }) {
   const [sub, setSub] = useState('Finished');
-  const collabs = getFinishedCollabs();
 
   return (
     <div className="campaigns">
@@ -29,7 +27,7 @@ export default function CampaignsScreen() {
         {sub === 'Active' && <EmptyState kind="active" />}
         {sub === 'Finished' && (
           collabs.length
-            ? <ThankYouGrid collabs={collabs} />
+            ? <ThankYouGrid collabs={collabs} onOpenCard={onOpenCard} />
             : <EmptyState kind="finished" />
         )}
       </div>

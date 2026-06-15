@@ -1,0 +1,140 @@
+/* ============================================================
+   Focused lightbox — a tapped grid card brought to the foreground
+   over a blurred, dimmed backdrop. Flip + browse here.
+   ============================================================ */
+.focus {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(24, 18, 38, 0.66);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: focus-in 0.22s ease-out;
+}
+@keyframes focus-in { from { opacity: 0; } to { opacity: 1; } }
+.focus--out { opacity: 0; transition: opacity 0.2s ease; }
+
+.focus__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px;
+}
+
+/* The card lifts/scales in from the grid. */
+.focus__card {
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  perspective: 1400px;
+  -webkit-tap-highlight-color: transparent;
+  animation: focus-card-in 0.34s cubic-bezier(0.2, 0.7, 0.3, 1.25);
+}
+@keyframes focus-card-in {
+  from { opacity: 0; transform: translateY(18px) scale(0.84); }
+  to   { opacity: 1; transform: none; }
+}
+
+.focus__flip {
+  position: relative;
+  display: block;
+  width: 288px;
+  height: 360px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.focus__flip.is-flipped { transform: rotateY(180deg); }
+.focus__face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.focus__face--back { transform: rotateY(180deg); }
+
+/* Force a consistent large polaroid regardless of the viewport-based size
+   rules in postcard.css (so the focused card is always big + legible). */
+.focus .pc-polaroid {
+  width: 320px; height: 400px;
+  padding: 14px 14px 0;
+  transform: scale(0.9);
+  transform-origin: center;
+}
+.focus .pc-polaroid--back {
+  width: 320px; height: 400px;
+  transform: scale(0.9);
+  transform-origin: center;
+}
+.focus .pc-polaroid__caption { font-size: 22px; }
+.focus .pc-polaroid__signoff { font-size: 16px; }
+.focus .pc-polaroid__sticker { width: 62px; height: 62px; right: -10px; bottom: -14px; }
+
+.focus__meta {
+  margin: 30px 0 0;
+  text-align: center;
+  color: #f2eefb;
+  font: 500 15px/1.45 -apple-system, system-ui, sans-serif;
+}
+.focus__brand { font-weight: 600; color: #fff; }
+.focus__date { display: block; margin-top: 3px; font-size: 12px; color: rgba(255, 255, 255, 0.6); }
+
+.focus__hint {
+  margin-top: 16px;
+  border: 0;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font: 600 12.5px/1 -apple-system, system-ui, sans-serif;
+  padding: 10px 18px;
+  border-radius: 999px;
+  transition: background 0.14s ease;
+}
+.focus__hint:hover { background: rgba(255, 255, 255, 0.24); }
+
+.focus__dots { display: flex; gap: 6px; justify-content: center; margin-top: 18px; }
+.focus__dots i {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transition: width 0.2s ease, background 0.2s ease;
+}
+.focus__dots i.on { background: #fff; width: 18px; border-radius: 3px; }
+
+.focus__close,
+.focus__arrow {
+  position: absolute;
+  z-index: 2;
+  border: 0;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.14s ease, transform 0.12s ease;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.focus__close:hover, .focus__arrow:hover { background: rgba(255, 255, 255, 0.26); }
+.focus__close {
+  top: 16px; right: 16px;
+  width: 38px; height: 38px; border-radius: 50%; font-size: 22px;
+}
+.focus__arrow {
+  top: 50%; transform: translateY(-50%);
+  width: 42px; height: 42px; border-radius: 50%; font-size: 24px;
+}
+.focus__arrow:hover { transform: translateY(-50%) scale(1.08); }
+.focus__arrow:disabled { opacity: 0; pointer-events: none; }
+.focus__arrow--prev { left: 14px; }
+.focus__arrow--next { right: 14px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .focus, .focus__card, .focus__flip { animation: none; transition: none; }
+}
